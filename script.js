@@ -29,10 +29,19 @@ barba.init({
     {
       name: "default-transition",
       leave() {
-        return leaveAnimation()
+        return leaveAnimation();
       },
-      enter() {
-        return enterAnimation()
+      enter(data) {
+        const entering = data.next.container;
+        // Asegurarnos de que el nuevo contenedor es visible
+        entering.style.opacity = "0";
+        return enterAnimation().then(() => {
+          entering.style.opacity = "1";
+        });
+      },
+      beforeEnter(data) {
+        // Aseguramos de que el contenedor saliente no es visible
+        data.current.container.style.display = "none";
       },
     },
   ],
